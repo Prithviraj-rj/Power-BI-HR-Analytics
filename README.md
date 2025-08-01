@@ -1,5 +1,3 @@
-# Power-BI-HR-Analytics
-A freelance project delivering a Power BI dashboard to analyze employee attendance, WFH, and sick leave trends. Features a dynamic Power Query pipeline to transform complex Excel data.
 # Freelance Project: HR Analytics Dashboard for a Tech Agency
 
 ## Project Title
@@ -9,7 +7,8 @@ A freelance project delivering a Power BI dashboard to analyze employee attendan
 As a freelance data analyst, I was commissioned by a software development agency to solve a critical inefficiency in their HR operations. The agency's HR Manager was reliant on manual analysis of monthly attendance data stored in disparate Excel sheets. This process was time-consuming, prone to errors, and failed to provide the strategic insights needed to manage their roster of developers effectively. The raw data was in a pivoted format (dates as columns), making traditional analysis extremely difficult.
 
 *Raw Data Snippet: The challenge was to transform this pivoted, multi-sheet format into a usable dataset.*
-![Raw Data Format](https://i.imgur.com/kS94Epl.png)
+<img width="1231" height="847" alt="Screenshot 2025-08-02 004416" src="https://github.com/user-attachments/assets/b059390e-948b-48b7-9793-9d5c8b68ca1c" />
+
 
 ## Objective / Goal
 The primary objective of this freelance engagement was to design and build a fully automated, interactive Power BI dashboard to replace the client's manual reporting process. The goals were to:
@@ -32,7 +31,8 @@ The primary data source was a real-world (but anonymized) attendance file provid
 *   **ID Map:** A separate sheet mapping anonymized employee IDs to names.
 *   **Attendance Key:** A legend defining the codes used in the attendance sheets (e.g., P, WFH, SL, HSL). This was used to create the calculation logic.
 
-![Attendance Key Logic](https://i.imgur.com/39sQ2tP.png)
+<img width="518" height="518" alt="PresentAndWFH references" src="https://github.com/user-attachments/assets/bfd7a093-cdb4-4f20-8ef8-832387ee56de" />
+
 
 ## Methodology / Process
 
@@ -45,14 +45,19 @@ This phase was critical due to the complex data structure. I engineered a soluti
 *   **Optimized Model:** I disabled the 'load' option for staging queries to keep the final data model lean and performant for the end-user.
 
 #### 2. Data Modeling & DAX Measures
-*   **Centralized Logic:** A dedicated 'Measure Table' was created in DAX to house all calculations—a best practice that makes the model easy for the client or another analyst to maintain.
-*   **Calculated Columns:** Created new columns using DAX for `Day of Week` and `Start of Month` to enable time-based and pattern analysis.
-*   **Core Measures:** Developed key DAX measures to power the dashboard visuals:
-    *   `Total Working Days`: Calculated by counting all days, excluding holidays and weekly-offs.
-    *   `Presence %`: `(Days Present + WFH Days) / Total Working Days`
-    *   `WFH %`: `WFH Days / (Days Present + WFH Days)`
-    *   `Sick Leave %`: `Sick Leave Days / Total Working Days`
-    *   The logic correctly handled half-day leaves (`HSL`, `HWFH`) by assigning them a value of 0.5.
+
+*   **Centralized Logic:** For better organization, all calculations were grouped in a dedicated 'Measure Table' in DAX. This is a best practice that keeps the project clean and easy to maintain.
+
+*   **Helper Columns:** To handle the various attendance codes (like 'P' for Present, 'WFH' for Work From Home, or 'HSL' for Half-day Sick Leave), I first added simple helper columns to the main data table using DAX. For example:
+    *   A `WorkFromHomeCount` column was created that assigned a `1` for a full WFH day and `0.5` for a half-day.
+    *   Similar columns were made for `Presence` and `Sick Leave`. This approach turned text codes into numbers, which made the final calculations much simpler and faster.
+
+*   **Core Measures:** With the helper columns in place, I wrote the final DAX measures that powered the dashboard visuals. The logic was clear and direct:
+    *   **Total Working Days:** Calculated by counting all possible workdays, excluding weekends and holidays.
+    *   **Total Present Days:** Calculated by simply summing the `Presence` helper column.
+    *   **Presence %:** The ratio of days an employee was present to their total working days.
+    *   **WFH %:** The percentage of *worked* days that were done from home.
+    *   **Sick Leave %:** The percentage of total working days that were taken as sick leave.
 
 #### 3. Dashboard Design & Visualization
 I designed the dashboard for clarity and intuitive use, ensuring the client could get answers to their most pressing questions immediately.
@@ -70,7 +75,8 @@ The final dashboard delivered immediate, data-driven insights that provided sign
 
 ## Dashboard or Model Output
 
-![HR Insights Dashboard](https://i.imgur.com/3wYq1uD.png)
+<img width="1378" height="768" alt="dashboard ss" src="https://github.com/user-attachments/assets/4b4742ee-5eed-4741-8cd4-c5689e552de9" />
+
 
 ## How to Run / Use
 1.  Clone or download this repository.
